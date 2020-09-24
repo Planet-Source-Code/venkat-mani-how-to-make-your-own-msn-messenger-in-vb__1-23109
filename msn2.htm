@@ -1,0 +1,141 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>MSN Messenger Protocol </title>
+</head>
+
+<body bgcolor="#000000" text="#FFFFFF">
+
+<p>&nbsp;</p>
+<p>Instant Messaging in MSN Messenger is session based . The people in between
+whom the conversation is going to take place have to be in a session mode. We
+cannot send/receive messages unless we start a chat session with a user.&nbsp;</p>
+<p>There are basically two methods in&nbsp; which a user can be in a chat
+session&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<ul>
+  <li>User sends a chat session request to another user</li>
+  <li>User receives a chat session request from another user</li>
+</ul>
+<p>&nbsp;</p>
+<p align="center"><font size="6" color="#008080">User sends a chat session
+request</font></p>
+<p>&nbsp;</p>
+<p>The client(user) sends a command to the server asking it for the address of
+the SwitchBoard(SB) server. All instant messaging conversation take place via
+the switchboard server.</p>
+<p><font color="#00FFFF">XFR 9 SB</font></p>
+<p><font color="#FFFFFF">The server(SB) replies back with the ip address of the
+switchboard server(SB),the port on which to connect and a CKI hash. CKI is a
+security package and the client has to use the hash to connect to the
+switchboard server.</font></p>
+<p><font color="#00FFFF">&nbsp;XFR 9 SB 64.4.13.88:1863 CKI 989487642.2070896604&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></p>
+<p><font color="#FFFFFF">Now we have to make <u>another&nbsp; new connection</u>
+this time to the switchboard server. </font><font color="#FF0000">Our previous
+connection to the MSN messenger server&nbsp; must be kept as it is</font><font color="#FFFFFF">.
+If we loose connection with that server we would log out.</font></p>
+<p><font color="#FFFFFF">After we have connected to the switchboard server(SB)
+we send the following command to the switchboard server.</font></p>
+<p><font color="#FFFF00">USR 1 venky_dude@hotmail.com&nbsp; 989487642.2070896604&nbsp;&nbsp;</font></p>
+<p><font color="#FFFFFF">If the CKI hash sent by us is right the server(SB)
+responds back with this</font></p>
+<p><font color="#0000FF">USR 1 OK venky_dude@hotmail.com venkat</font></p>
+<p><font color="#FFFFFF">After this has been done the user has to
+&quot;Call&quot; the other user to the chat session. This is done by sending the
+following command.</font></p>
+<p><font color="#FFFF00">CAL 2 deadxxx@hotmail.com&nbsp;</font></p>
+<p>The server replies back with the a session id which it will pass on to the
+other user</p>
+<p><font color="#0000FF">CAL 2 RINGING 11717653</font></p>
+<p>When the other user replies and is ready for a chat the server(SB) sends us
+this command</p>
+<p><font color="#0000FF">JOI deadlee@hotmail.com Venkatesh</font></p>
+<p>This indicates that the other user has joined in the conversation and we are
+now ready to send and receive messages.</p>
+<p>&nbsp;</p>
+<p align="center"><font size="6" color="#008080">User receives a chat session
+request</font></p>
+<p align="left">When we are being invited to a chat session by a user the
+server(NS) send us the following message.</p>
+<p>&nbsp;</p>
+<p><font color="#00FF00">RNG 11742066 64.4.13.74:1863 CKI 989495494.750408580
+deaxxxx@hotmail.com Venkatesh</font></p>
+<p>Here the server(NS) sends us the session id ,the ip address of the
+SwitchBoard server to connect to,the port on which to connect to ,the CKI hash
+and the user trying to start a conversation with us.</p>
+<p><font color="#FFFFFF">Now we have to make <u>another&nbsp; new connection</u>
+this time to the switchboard server. </font><font color="#FF0000">Our previous
+connection to the MSN messenger server&nbsp; must be kept as it is</font><font color="#FFFFFF">.
+If we loose connection with that server we would log out.</font></p>
+<p>We&nbsp; connect to the switchboard server and send the following command</p>
+<p><font color="#FFFF00">ANS 1 venky_dude@hotmail.com 989495494.750408580
+11742066</font></p>
+<p>Here we send our login name ,the CKI hash that was sent to us and the session
+Id that was sent to us</p>
+<p>The server responds back with&nbsp;</p>
+<p><font color="#0000FF">IRO 1 1 1 deaxxxx@hotmail.com Venkatesh</font></p>
+<p>and</p>
+<p><font color="#0000FF">ANS 1 OK</font></p>
+<p>We are now ready to send and receive messages.</p>
+<p>&nbsp;</p>
+<p>Before sending/receiving messages let us see how the message is constructed.</p>
+<p>When we are sending a message we build the header information&nbsp; in the
+following way</p>
+<p>MIME-Version: 1.0<br>
+Content-Type: text/plain; charset=UTF-8<br>
+X-MMS-IM-Format: FN=Microsoft%20Sans%20Serif; EF=; CO=0; CS=0; PF=22</p>
+<p>While sending a message we send it this way</p>
+<p><font color="#FFFF00">MSG&nbsp; 2&nbsp; N
+137&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+MIME-Version: 1.0<br>
+Content-Type: text/plain; charset=UTF-8<br>
+X-MMS-IM-Format: FN=Microsoft%20Sans%20Serif; EF=; CO=0; CS=0; PF=22<br>
+<br>
+hello</font></p>
+<p><font color="#FFFFFF">Here 2 is the trial id which has to incremented each
+time we send a message. 137 is the total length of the message i.e length of the
+header and length of the actual message that we are sending in this case it is
+'hello'.</font></p>
+<p><font color="#FFFFFF">&nbsp;While receiving the message it is more or less
+similar</font></p>
+<p><font color="#FFFFFF">Here is an example of a message received</font></p>
+<p><font color="#0000FF">MSG deaxxxx@hotmail.com Venkatesh 137<br>
+MIME-Version: 1.0<br>
+Content-Type: text/plain; charset=UTF-8<br>
+X-MMS-IM-Format: FN=Microsoft%20Sans%20Serif; EF=; CO=0; CS=0; PF=22<br>
+<br>
+hello</font></p>
+<p>&nbsp;</p>
+<p><font color="#FFFFFF">When the other user is typing a message we receive the
+foll message</font></p>
+<p><font color="#0000FF">MSG deaxxxx@hotmail.com Venkatesh 100<br>
+MIME-Version: 1.0<br>
+Content-Type: text/x-msmsgscontrol<br>
+TypingUser: </font><font color="#0000FF">deaxxxx@hotmail.com</font></p>
+<p>&nbsp;</p>
+<p>I guess now u guys are well on your way to make your own version of&nbsp; MSN
+messenger.If u guys have any doubts regarding this messenger or vb/c++ in
+general send me a mail at <a href="mailto:venky_dude@yahoo.com">venky_dude@yahoo.com</a>
+or you could go to my <a href="askme.htm">askme </a> page and ask me a
+question.Do visit my projects page at <a href="http://www.geocities.com/venky_dude/venkwork.htm">http://www.geocities.com/venky_dude/venkwork.htm</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>References:</p>
+<p>You could take a look at these sites for more information</p>
+<p>This is the original protocol published by microsoft.</p>
+<p><a href="http://www.ics.uci.edu/~impp-1/knowledge.html">http://www.ics.uci.edu/~impp-1/knowledge.html</a></p>
+<p>This is the MD5 homepage where u can find programs/codes for doing the MD5
+encryption</p>
+<p><a href="http://userpages.umbc.edu/~mabzug1/cs/md5/md5.html">http://userpages.umbc.edu/~mabzug1/cs/md5/md5.html</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="msn.htm"><img border="0" src="jj0042.gif" width="100" height="75"></a></p>
+
+<p><font color="#FFFFFF">You can download a sample application from here <a href="unify.zip">Unify.zip</a></font></p>
+
+</body>
+
+</html>
