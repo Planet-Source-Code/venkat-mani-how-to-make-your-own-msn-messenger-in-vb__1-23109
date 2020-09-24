@@ -1,0 +1,238 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<title>MSN Messenger Protocol (Practical Implementation) a.k.a How to make ur own messenger</title>
+</head>
+
+<body bgcolor="#000000" text="#FFFFFF">
+
+<p align="center"><font color="#0000FF" size="5">MSN Messenger
+Protocol (Practical Implementation)</font></p>
+
+<p align="center"><font color="#0000FF" size="3">a.k.a</font></p>
+
+<p align="center"><font color="#0000FF" size="5">How to make your
+own version of MSN messenger</font></p>
+
+<p align="center"><font color="#FFFFFF"></font>&nbsp;</p>
+
+<p align="center"><font color="#FFFFFF"></font>&nbsp;</p>
+
+<p align="left"><font color="#FFFFFF">You have been using MSN for
+quite some time wondering how it works. Well You need not look any further. This article will not just tell you how MSN works but
+will also tell you how to make your own version of MSN messenger. You can
+download a sample application from here <a href="unify.zip">Unify.zip</a> .Let's
+get ready to rumble!!!!</font></p>
+
+<p align="left"><font color="#FFFFFF"></font>&nbsp;</p>
+
+<p align="left"><font color="#FFFFFF">We can split up the working
+of MSN messenger into 2 phases</font></p>
+
+<ul>
+    <li><p align="left"><font color="#FFFFFF">Authentication
+        Phase</font></p>
+    </li>
+    <li><p align="left"><font color="#FFFFFF">Instant Messaging
+        Phase</font></p>
+    </li>
+</ul>
+
+<p align="left"><font color="#FFFFFF"></font>&nbsp;</p>
+
+<p align="left"><font color="#FFFFFF">The Authentication Phase
+involves logging into the MSN messenger server and also (friends)
+list retrieval in this case.</font></p>
+
+<p align="left"><font color="#FFFFFF">The Instant Messaging Phase
+involves sending/accepting requests for an Instant Messaging
+session and also sending/receiving messages.</font></p>
+
+<p align="left"><font color="#FFFFFF"></font>&nbsp;</p>
+
+<p align="left"><font color="#FFFFFF">The MSN messenger protocol
+is an ASCII based protocol. In other words the commands are in
+pure English !!!.The first phase involves connecting to an MSN
+messenger server .In this case we shall connect to the server 64.4.13.58
+on port 1863(MSN messenger works through port 1863).</font></p>
+
+<p align="left"><font color="#FFFFFF">Once the connection is done
+we need to start the log in process. The first stage in this phase
+is the versioning stage. In this stage the client (in this case your
+app) lists/sends the versions that it can support to the server
+and waits for the server to respond.</font></p>
+
+<p align="left"><font color="#00FFFF">VER 0 MSNP5 MSNP4 CVRO</font></p>
+
+<p align="left"><font color="#FF0000">In the MSN messenger
+protocol a &quot;trial id&quot; is sent along with every command. The
+trial id starts from 0 and is incremented every time the server
+responds successfully to the client's commands.</font></p>
+
+<p align="left"><font color="#FF0000"></font>&nbsp;</p>
+
+<p align="left"><font color="#FFFFFF">The server responds like
+this</font></p>
+
+<p align="left"><font color="#00FF00">VER 0 MSNP5 MSNP4</font></p>
+
+<p align="left"><font color="#FFFFFF">The Client and the server
+have agreed on a version in which they will communicate.</font></p>
+
+<p align="left"><font color="#FFFFFF"></font>&nbsp;</p>
+
+<p align="left"><font color="#FFFFFF">Next the client sends a
+request to the server asking it for the name of the security
+package it supports for authentication.</font></p>
+
+<p align="left"><font color="#00FFFF">INF 1</font></p>
+
+<p align="left"><font color="#FF0000">Unlike Yahoo, Rediff and a
+few other Messengers MSN does not actually send the password as
+it is.It encrypts the password while sending it ensuring that
+your password will not be leaked out easily if somebody monitors
+your port.</font></p>
+
+<p align="left"><font color="#FF0000"></font>&nbsp;</p>
+
+<p align="left"><font color="#FFFFFF">The server responds with
+this </font></p>
+
+<p align="left"><font color="#00FF00">INF 1 MD5</font></p>
+
+<p align="left"><font color="#FFFFFF">Here MD5 is the name of the
+security package which the server currently supports.</font></p>
+
+<p align="left"><font color="#FFFFFF">Next the client sends the
+userid to the server</font></p>
+
+<p align="left">&nbsp;</p>
+
+<p align="left"><font color="#00FFFF">USR 2&nbsp; MD5&nbsp; I&nbsp; <a href="mailto:venky_dude@hotmail.com">venky_dude@hotmail.com</a></font></p>
+
+<p align="left">Here the server does a check whether it contains all the
+relevant details about the user for authentication .If it does not then it sends
+the following reply</p>
+
+<p align="left"><font color="#00FF00">&nbsp;XFR 2&nbsp; NS 64.4.13.55:1863&nbsp;
+0</font></p>
+
+<p align="left"><font color="#FF0000">What the server says is that the client
+should connect to the Notification Server(NS) on 64.4.13.55 on port 1863. We
+close the current connection and repeat the&nbsp; steps while being connected to
+the new server i.e&nbsp; 64.4.13.55</font></p>
+
+<ul>
+  <li>
+    <p align="left"><font color="#FF0000">(client)&nbsp;&nbsp; VER 3 MSNP5 MSNP4
+    CVRO</font></li>
+  <li>
+    <p align="left"><font color="#FF0000">(server) VER 3 MSNP5 MSNP4&nbsp;</font></li>
+  <li>
+    <p align="left"><font color="#FF0000">(client)&nbsp;&nbsp; INF&nbsp; 4</font></li>
+  <li>
+    <p align="left"><font color="#FF0000">(server) INF&nbsp; 4&nbsp; MD5</font></li>
+  <li>
+    <p align="left"><font color="#FF0000">(client)&nbsp; USR&nbsp; 5&nbsp; MD5 I
+    venky_dude@hotmail.com</font></li>
+</ul>
+<p align="left">Now the server to which we are connected to has the relevant
+information about the user trying to log in. The server replies this way</p>
+
+<p align="left"><font color="#00FF00">USR 5&nbsp; MD5&nbsp; S
+989048851.1851137130</font></p>
+
+<p align="left"><font color="#FFFFFF"></font>&nbsp;The string which is sent by
+the server is the &quot; MD5 Hash&quot;. It is a hash generated by the server
+and is used in the authentication process. The client then has to send the
+password which is encrypted using the <a href="http://userpages.umbc.edu/~mabzug1/cs/md5/md5.html">MD5</a>
+algorithm.In effect the client has to send the unique <a href="http://userpages.umbc.edu/~mabzug1/cs/md5/md5.html">MD5</a>
+equivalent of the <a href="http://userpages.umbc.edu/~mabzug1/cs/md5/md5.html">MD5</a>
+hash i.e <font color="#FFFFFF">989048851.1851137130 in this case and the
+password combined .i.e. <a href="http://userpages.umbc.edu/~mabzug1/cs/md5/md5.html">MD5</a>
+equivalent of (hash+pass). In this case it turns out to be </font><font color="#FFFFFF"> 3b7926d277068ec49576a0c40598ff21.</font></p>
+
+<p align="left"><font color="#00FFFF">USR 6 MD5 S 3b7926d277068ec49576a0c40598ff21</font></p>
+
+<p align="left"><font color="#FFFFFF">If the password is right then the server
+replies with this</font></p>
+
+<p align="left"><font color="#00FF00">USR 6 OK venky_dude@hotmail.com venkat</font></p>
+
+<p align="left"><font color="#FFFFFF">Here the last word is the nickname/name by
+which the user is known.</font></p>
+
+<p align="left"><font color="#FFFFFF">Now we are logged into the server but our
+status is still offline. We need to change our status to online in order to send
+and receive messages. The client does this in the following way</font></p>
+
+<p align="left"><font color="#00FFFF">CHG 7 NLN</font></p>
+
+<p align="left"><font color="#FFFFFF">The server replies with some details about
+emails in the account and also friends who are online.</font></p>
+
+<p align="left"><font color="#00FF00">CHG 7 NLN<br>
+MSG Hotmail Hotmail 221<br>
+MIME-Version: 1.0<br>
+Content-Type: text/x-msmsgsinitialemailnotification; charset=UTF-8<br>
+<br>
+Inbox-Unread: 2<br>
+Folders-Unread: 0<br>
+Inbox-URL: /cgi-bin/HoTMaiL<br>
+Folders-URL: /cgi-bin/folders<br>
+Post-URL: http://www.hotmail.com</font></p>
+
+<p align="left"><font color="#FFFFFF">To get a list of people who are in our
+friends list we may send this command</font></p>
+
+<p align="left"><font color="#00FFFF">LST 8 RL</font></p>
+
+<p align="left">The server responds this way</p>
+
+<p align="left"><font color="#00FF00">LST 8 RL 69 1 19 venky_dude@hotmail.com venkat<br>
+LST 8 RL 69 2 19 puxxxxx@hotmail.com PUJA<br>
+LST 8 RL 69 3 19 vancxxxxx@hotmail.com ramachandran<br>
+LST 8 RL 69 4 19 moxxxxx@hotmail.com chandramouli<br>
+LST 8 RL 69 5 19 v_n_xxxxx@hotmail.com Narayanaswamy<br>
+LST 8 RL 69 6 19 dexxxxx@hotmail.com Venkatesh<br>
+LST 8 RL 69 7 19 lousydxxxxx@hotmail.com deepika%20kalyani%20Vairam&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+LST 8 RL 69 8 19 hexxxxxr@hotmail.com Hetchar%20Ramachandran<br>
+LST 8 RL 69 9 19 ambxxxxx@hotmail.com Aiyer<br>
+LST 8 RL 69 10 19 suxxx@hotmail.com Ganesh<br>
+LST 8 RL 69 11 19 deexxxxx@hotmail.com Deepak<br>
+LST 8 RL 69 12 19 anilxxxxx@hotmail.com anil<br>
+LST 8 RL 69 13 19 dixxxxx@hotmail.com &lt;Diamond><br>
+LST 8 RL 69 14 19 nvxxxx@hotmail.com giri<br>
+LST 8 RL 69 15 19 shxxx@hotmail.com Hari<br>
+LST 8 RL 69 16 19 radhikashuxxxxx@hotmail.com radhika<br>
+LST 8 RL 69 17 19 eskaxxxxx@hotmail.com kannan<br>
+LST 8 RL 69 18 19 shaxxxxx@hotmail.com Shankar<br>
+LST 8 RL 69 19 19 puneetagarxxxxx@hotmail.com puneet</font></p>
+
+<p align="left">&nbsp;</p>
+
+<p align="left">&nbsp;</p>
+
+<p align="left">*Every time a friend comes online the server(NS) sends us the
+following command</p>
+
+<p align="left"><font color="#00FF00">NLN 9 NLN deaxxxx@hotmail.com Venkatesh</font></p>
+
+<p align="left">and when the friend goes offline the server sends us this</p>
+
+<p align="left"><font color="#00FF00">FLN 9 FLN deaxxxx@hotmail.com </font></p>
+
+<p align="left">&nbsp;</p>
+
+<p align="left"><font color="#FF0000">We have successfully logged into the MSN
+Messenger server. The Instant Messaging phase is next.</font></p>
+
+<p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="msn2.htm"><img border="0" src="jj0041.gif" alt="Next Page" width="100" height="75"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+
+</body>
+</html>
